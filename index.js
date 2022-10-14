@@ -7,6 +7,7 @@ const v = new Validator();
 const ErrCodeCantReadFolder = -1;
 const ErrCodeUnableToReadTemplate = -2;
 const ErrCodeUnableToReadSchema = -3;
+const ErroCodeValidationFailed = 1;
 
 let schema;
 try {
@@ -28,8 +29,6 @@ function validateTemplate(fileName) {
 
    return v.validate(instance, schema);
 }
-
-const results = {};
 
 const directoryPath = path.join(__dirname, 'templates');
 fs.readdir(directoryPath, function (err, files) {
@@ -65,6 +64,7 @@ fs.readdir(directoryPath, function (err, files) {
                 console.log(`    ${error}`);
             });
         });
+        process.exit(ErroCodeValidationFailed);
     }
 });
 
