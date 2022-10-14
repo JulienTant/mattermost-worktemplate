@@ -1,5 +1,5 @@
 category: product_teams 
-useCase: feature release
+useCase: Feature Release
 visibility: public
 featureFlag: # optional. only shows this template when the feature flag having is name have this value.
   name: feature_release_work_template
