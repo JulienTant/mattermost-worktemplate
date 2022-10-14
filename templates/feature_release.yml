@@ -1,0 +1,46 @@
+category: product_teams 
+usecase: feature release
+visibility: public
+featureflag: # optional. only shows this template when the feature flag having is name have this value.
+  name: feature_release_work_template
+  value: on
+description:
+    channel:
+        id: ""
+        defaulttext: "This is the channels section description"
+    board:
+        id: ""
+        defaulttext: "This is the boards section description"
+    playbook:
+        id: ""
+        defaulttext: "This is the playbooks section description"
+    integration:
+        id: ""
+        defaulttext: "This is the integrations section description"
+        illustration: "/images/worktemplates/integrations/jira-github.png"
+content:
+  - channel:
+      id: feature-release # optional. for internal use - in this case linking boards to this channel.
+      name: feature release channel
+      purpose: this channel is for the feature release team.
+      playbook: product-release-playbook # playbook id. if set the channel will be created by the playbook run.
+      illustration: "/images/worktemplates/channels/feature-release.png"
+  - board:
+      template: "meeting agenda|bwps66irhr7b9dxgayf9kz33g5o" # <-- have to find a way to target the board template... could hardcode the ids but need to verify that they don't change?
+      name: meeting agenda board
+      channel: feature-release # <-- optional. we use the channel "id" from above
+      illustration: "/images/worktemplates/boards/meeting-agenda.png"
+  - board:
+      template: "project task|bmttiziw35irgtmztewd9upyqdy"
+      name: project task board
+      channel: feature-release
+      illustration: "/images/worktemplates/boards/project-task.png"
+  - playbook:
+      template: "product release" # <-- playbooks templates don't have ids, have to rely on name
+      name: "feature release playbook"
+      id: product-release-playbook
+      illustration: "/images/worktemplates/boards/project-task.png"
+  - integration:
+      id: marketplace-plugin-jira
+  - integration:
+      id: marketplace-plugin-github
