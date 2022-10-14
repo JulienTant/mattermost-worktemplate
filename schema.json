@@ -1,0 +1,224 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://mattermost.com/defs/work-template",
+    "type": "object",
+    "properties": {
+        "category": {
+            "type": "string",
+            "enum": [
+                "product_teams",
+                "devops",
+                "company_wide",
+                "leadership",
+                "design"
+            ]
+        },
+        "usecase": {
+            "type": "string",
+            "minLength": 1
+        },
+        "description": {
+            "$ref": "#/$defs/description"
+        },
+        "visibility": {
+            "type": "string",
+            "enum": [
+                "public",
+                "private"
+            ]
+        },
+        "featureflag": {
+            "$ref": "#/$defs/featureflag"
+        },
+        "content": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/$defs/channel"
+                    },
+                    {
+                        "$ref": "#/$defs/board"
+                    },
+                    {
+                        "$ref": "#/$defs/playbook"
+                    },
+                    {
+                        "$ref": "#/$defs/integration"
+                    }
+                ]
+            }
+        }
+    },
+    "required": [
+        "category",
+        "usecase",
+        "description",
+        "visibility",
+        "content"
+    ],
+    "$defs": {
+        "channel": {
+            "type": "object",
+            "properties": {
+                "channel": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "purpose": {
+                            "type": "string"
+                        },
+                        "playbook": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "name"
+                    ]
+                }
+            },
+            "required": [
+                "channel"
+            ]
+        },
+        "board": {
+            "type": "object",
+            "properties": {
+                "board": {
+                    "type": "object",
+                    "properties": {
+                        "template": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "name": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "channel": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "template",
+                        "name"
+                    ]
+                }
+            },
+            "required": [
+                "board"
+            ]
+        },
+        "playbook": {
+            "type": "object",
+            "properties": {
+                "playbook": {
+                    "type": "object",
+                    "properties": {
+                        "template": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "template",
+                        "name"
+                    ]
+                }
+            },
+            "required": [
+                "playbook"
+            ]
+        },
+        "integration": {
+            "type": "object",
+            "properties": {
+                "integration": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "id"
+                    ]
+                }
+            },
+            "required": [
+                "integration"
+            ]
+        },
+        "featureflag": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": [
+                        "string",
+                        "boolean"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "value"
+            ]
+        },
+        "description": {
+            "type": "object",
+            "properties": {
+                "channel": {
+                    "$ref": "#/$defs/translatableString"
+                },
+                "board": {
+                    "$ref": "#/$defs/translatableString"
+                },
+                "playbook": {
+                    "$ref": "#/$defs/translatableString"
+                },
+                "integration": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/translatableString"
+                        }
+                    ],
+                    "properties": {
+                        "illustration": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "illustration"
+                    ]
+                }
+            },
+            "required": []
+        },
+        "translatableString": {
+            "type": "object",
+            "properties": {
+                "i18nId": {
+                    "type": "string"
+                },
+                "defaulttext": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "defaulttext"
+            ]
+        }
+    }
+}
