@@ -1,22 +1,22 @@
 category: product_teams 
-usecase: feature release
+useCase: feature release
 visibility: public
-featureflag: # optional. only shows this template when the feature flag having is name have this value.
+featureFlag: # optional. only shows this template when the feature flag having is name have this value.
   name: feature_release_work_template
   value: on
 description:
     channel:
-        id: ""
-        defaulttext: "This is the channels section description"
+        i18nId: ""
+        defaultText: "This is the channels section description"
     board:
-        id: ""
-        defaulttext: "This is the boards section description"
+        i18nId: ""
+        defaultText: "This is the boards section description"
     playbook:
-        id: ""
-        defaulttext: "This is the playbooks section description"
+        i18nId: ""
+        defaultText: "This is the playbooks section description"
     integration:
-        id: ""
-        defaulttext: "This is the integrations section description"
+        i18nId: ""
+        defaultText: "This is the integrations section description"
         illustration: "/images/worktemplates/integrations/jira-github.png"
 content:
   - channel:
