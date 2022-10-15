@@ -1,0 +1,60 @@
+import React  from 'react';
+import { FormGroup, Label, Input } from 'reactstrap';
+import { Playbook } from './types';
+import { slufigy } from './utils';
+
+interface PlaybookFormProps {
+    playbook: Playbook;
+    onPlaybookSaved: (playbook: Playbook) => void;
+}
+
+const Templates = [
+    { key: 'template-1', name: 'Template 1', illustration: '/test-1.png' },
+    { key: 'template-2', name: 'Template 2', illustration: '' },
+]
+
+export function PlaybookForm(props: PlaybookFormProps) {
+    const playbook = props.playbook;
+    const updatePlaybook = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let newPlaybook = {
+            ...playbook,
+            [e.target.name]: e.target.value
+        };
+
+        if (e.target.name === 'name') {
+            newPlaybook.id = `playbook-${slufigy(e.target.value)}`;
+        }
+
+        if (e.target.name === 'template' && newPlaybook.illustration === '') {
+            newPlaybook.illustration = Templates.find(t => t.key === newPlaybook.template)?.illustration || '';
+        }
+
+        props.onPlaybookSaved(newPlaybook);
+    };
+
+    return (
+        <div className='row'>
+            <div className='col-12'>
+                <FormGroup>
+                    <Label>Template</Label>
+                    <Input type='select' name='template' value={playbook.template} onChange={updatePlaybook}>
+                        <option value={''}></option>
+                        {Templates.map((template) => (
+                            <option key={template.key} value={template.key}>{template.name}</option>
+                        ))}
+                    </Input>
+                </FormGroup>
+
+                <FormGroup>
+                    <Label >Name</Label>
+                    <Input type='text' name='name' value={playbook.name} onChange={updatePlaybook} />
+                </FormGroup>
+
+                <FormGroup>
+                    <Label >Illustration</Label>
+                    <Input type='text' name='illustration' value={playbook.illustration} onChange={updatePlaybook} />
+                </FormGroup>
+            </div>
+        </div>
+    );
+}
