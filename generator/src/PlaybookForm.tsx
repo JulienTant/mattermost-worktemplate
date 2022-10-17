@@ -9,8 +9,12 @@ interface PlaybookFormProps {
 }
 
 const Templates = [
-    { key: 'template-1', name: 'Template 1', illustration: '/test-1.png' },
-    { key: 'template-2', name: 'Template 2', illustration: '' },
+    { key: 'product-release', name: 'Product Release', illustration: '/test-1.png' },
+    { key: 'incident-resolution', name: 'Incident Resolution', illustration: '' },
+    { key: 'customer-onboarding', name: 'Customer Onboarding', illustration: '' },
+    { key: 'employee-onboarding', name: 'Employee Onboarding', illustration: '' },
+    { key: 'feature-lifecycle', name: 'Feature Lifecycle', illustration: '' },
+    { key: 'bug-bash', name: 'Bug Bash', illustration: '' },
 ]
 
 export function PlaybookForm(props: PlaybookFormProps) {

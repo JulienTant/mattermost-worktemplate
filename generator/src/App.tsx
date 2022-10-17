@@ -9,9 +9,10 @@ import { slufigy } from './utils';
 const PlaybookGeneratedChannelKey = 'playbook-generated-channel';
 
 const Categories = [
-  { key: 'category-1', value: 'category-1', name: 'Category 1' },
-  { key: 'category-2', value: 'category-2', name: 'Category 2' },
-  { key: 'category-3', value: 'category-3', name: 'Category 3' },
+  { key: 'product_team', name: 'Product Team' },
+  { key: 'devops', name: 'Dev Ops' },
+  { key: 'company_wide', name: 'Company - Wide' },
+  { key: 'leadership', name: 'Leadership' },
 ]
 
 export default function App() {
@@ -108,7 +109,7 @@ export default function App() {
                 <Label>Category</Label>
                 <Input type='select' name='category' value={category} onChange={(e) => setCategory(e.target.value)}>
                   <option value=''>Select a category</option>
-                  {Categories.map(c => <option key={c.key} value={c.value}>{c.name}</option>)}
+                  {Categories.map(c => <option key={c.key} value={c.key}>{c.name}</option>)}
                 </Input>
               </FormGroup>
 

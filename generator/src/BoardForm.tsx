@@ -3,31 +3,37 @@ import { FormGroup, Label, Input } from 'reactstrap';
 import { Board, Channel } from './types';
 
 interface BoardFormProps {
-    board: Board;
-    channels: Channel[];
-    onBoardSaved: (board: Board) => void;
+  board: Board;
+  channels: Channel[];
+  onBoardSaved: (board: Board) => void;
 }
 
+// Key is the [properties.trackingTemplateId] of the template.
+// Stored on team 0
 const Templates = [
-    { key: 'template-1', name: 'Template 1', illustration: '/test-1.png' },
-    { key: 'template-2', name: 'Template 2', illustration: '' },
+  { key: "54fcf9c610f0ac5e4c522c0657c90602", name: "Meeting Agenda", illustration: "" },
+  { key: "dfb70c146a4584b8a21837477c7b5431", name: "Personal Tasks", illustration: "" },
+  { key: "a4ec399ab4f2088b1051c3cdf1dde4c3", name: "Project Tasks", illustration: "" },
+  { key: "7f32dc8d2ae008cfe56554e9363505cc", name: "Personal Goals", illustration: "" },
+  { key: "c75fbd659d2258b5183af2236d176ab4", name: "Content Calendar", illustration: "" },
+  { key: "b728c6ca730e2cfc229741c5a4712b65", name: "Roadmap", illustration: "" },
 ]
 
 export function BoardForm(props: BoardFormProps) {
-    const board = props.board;
+  const board = props.board;
 
-    const updateBoard = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let newBoard = {
-            ...board,
-            [e.target.name]: e.target.value
-        };
-
-        if (e.target.name === 'template' && newBoard.illustration === '') {
-            newBoard.illustration = Templates.find(t => t.key === newBoard.template)?.illustration || '';
-        }
-
-        props.onBoardSaved(newBoard);
+  const updateBoard = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newBoard = {
+      ...board,
+      [e.target.name]: e.target.value
     };
+
+    if (e.target.name === 'template' && newBoard.illustration === '') {
+      newBoard.illustration = Templates.find(t => t.key === newBoard.template)?.illustration || '';
+    }
+
+    props.onBoardSaved(newBoard);
+  };
 
 
   return (
@@ -38,9 +44,9 @@ export function BoardForm(props: BoardFormProps) {
           <Input type='select' name='template' value={board.template} onChange={updateBoard}>
             <option value={''}></option>
             {Templates.map((template) => (
-                <option key={template.key} value={template.key}>{template.name}</option>
+              <option key={template.key} value={template.key}>{template.name}</option>
             ))}
-            </Input>
+          </Input>
         </FormGroup>
 
         <FormGroup>
@@ -54,11 +60,11 @@ export function BoardForm(props: BoardFormProps) {
         </FormGroup>
 
         <FormGroup>
-            <Label >Link to a channel</Label>
-            <Input type='select' name='channel' value={board.channel} onChange={updateBoard}>
-                <option value=''>None</option>
-                {props.channels.map(channel => <option key={channel.id} value={channel.id}>{channel.name}</option>)}
-            </Input>
+          <Label >Link to a channel</Label>
+          <Input type='select' name='channel' value={board.channel} onChange={updateBoard}>
+            <option value=''>None</option>
+            {props.channels.map(channel => <option key={channel.id} value={channel.id}>{channel.name}</option>)}
+          </Input>
         </FormGroup>
       </div>
     </div>
