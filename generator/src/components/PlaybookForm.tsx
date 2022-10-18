@@ -1,7 +1,6 @@
-import React  from 'react';
+import React from 'react';
 import { FormGroup, Label, Input } from 'reactstrap';
-import { Playbook } from './types';
-import { slufigy } from './utils';
+import { Playbook } from '../types';
 
 interface PlaybookFormProps {
     playbook: Playbook;
@@ -18,6 +17,8 @@ const Templates = [
 ]
 
 export function PlaybookForm(props: PlaybookFormProps) {
+    const [changedIllustration, setChangedIllustration] = React.useState(false);
+
     const playbook = props.playbook;
     const updatePlaybook = (e: React.ChangeEvent<HTMLInputElement>) => {
         let newPlaybook = {
@@ -25,12 +26,15 @@ export function PlaybookForm(props: PlaybookFormProps) {
             [e.target.name]: e.target.value
         };
 
-        if (e.target.name === 'name') {
-            newPlaybook.id = `playbook-${slufigy(e.target.value)}`;
-        }
-
-        if (e.target.name === 'template' && newPlaybook.illustration === '') {
-            newPlaybook.illustration = Templates.find(t => t.key === newPlaybook.template)?.illustration || '';
+        switch (e.target.name) {
+            case 'illustration':
+                setChangedIllustration(true);
+                break;
+            case 'template':
+                if (!changedIllustration) {
+                    newPlaybook.illustration = Templates.find(t => t.key === newPlaybook.template)?.illustration || '';
+                }
+                break;
         }
 
         props.onPlaybookSaved(newPlaybook);

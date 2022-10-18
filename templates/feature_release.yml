@@ -1,5 +1,6 @@
 category: product_teams 
 useCase: Feature Release
+illustration: /images/illustrations/feature-release.png
 visibility: public
 featureFlag: # optional. only shows this template when the feature flag having is name have this value.
   name: feature_release_work_template
@@ -26,11 +27,13 @@ content:
       playbook: product-release-playbook # playbook id. if set the channel will be created by the playbook run.
       illustration: "/images/worktemplates/channels/feature-release.png"
   - board:
+      id: "board-meeting-agenda"
       template: "meeting agenda|bwps66irhr7b9dxgayf9kz33g5o" # <-- have to find a way to target the board template... could hardcode the ids but need to verify that they don't change?
       name: meeting agenda board
       channel: feature-release # <-- optional. we use the channel "id" from above
       illustration: "/images/worktemplates/boards/meeting-agenda.png"
   - board:
+      id: "board-project-task"
       template: "project task|bmttiziw35irgtmztewd9upyqdy"
       name: project task board
       channel: feature-release

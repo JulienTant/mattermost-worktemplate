@@ -15,7 +15,11 @@
         },
         "useCase": {
             "type": "string",
-            "minlength": 1
+            "minLength": 1
+        },
+        "illustration": {
+            "type": "string",
+            "minLength": 1
         },
         "description": {
             "$ref": "#/$defs/description"
@@ -38,6 +42,7 @@
     "required": [
         "category",
         "useCase",
+        "illustration",
         "description",
         "visibility",
         "content"
@@ -103,7 +108,7 @@
                 },
                 "name": {
                     "type": "string",
-                    "minlength": 1
+                    "minLength": 1
                 },
                 "purpose": {
                     "type": "string"
@@ -116,6 +121,7 @@
                 }
             },
             "required": [
+                "id",
                 "name",
                 "illustration"
             ],
@@ -126,20 +132,25 @@
             "properties": {
                 "template": {
                     "type": "string",
-                    "minlength": 1
+                    "minLength": 1
                 },
                 "name": {
                     "type": "string",
-                    "minlength": 1
+                    "minLength": 1
                 },
                 "channel": {
                     "type": "string"
                 },
                 "illustration": {
                     "type": "string"
+                },
+                "id": {
+                    "type": "string",
+                    "minLength": 1
                 }
             },
             "required": [
+                "id",
                 "template",
                 "name",
                 "illustration"
@@ -239,7 +250,7 @@
                 },
                 "defaultText": {
                     "type": "string",
-                    "minlength": 1
+                    "minLength": 1
                 }
             },
             "required": [

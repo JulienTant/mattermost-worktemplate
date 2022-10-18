@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormGroup, Label, Input } from 'reactstrap';
-import { Board, Channel } from './types';
+import { Board, Channel } from '../types';
 
 interface BoardFormProps {
   board: Board;

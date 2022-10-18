@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { FormGroup, ButtonGroup, Label, Input, Button, Badge, UncontrolledAccordion, AccordionBody, AccordionHeader } from 'reactstrap';
-import { BoardForm } from './BoardForm';
-import { ChannelForm } from './ChannelForm';
-import { PlaybookForm } from './PlaybookForm';
-import { Board, Channel, Playbook } from './types';
-import { slufigy } from './utils';
+import { FormGroup, ButtonGroup, Label, Input, Button, Badge, AccordionBody, AccordionHeader, Accordion } from 'reactstrap';
+import { BoardForm } from './components/BoardForm';
+import { ChannelForm } from './components/ChannelForm';
+import { PlaybookForm } from './components/PlaybookForm';
+import Preview from './components/Preview';
+import { Board, Channel, Playbook, Visibility } from './types';
 
-const PlaybookGeneratedChannelKey = 'playbook-generated-channel';
 
 const Categories = [
   { key: 'product_team', name: 'Product Team' },
@@ -16,87 +15,127 @@ const Categories = [
 ]
 
 export default function App() {
-
   const [category, setCategory] = useState('');
   const [useCase, setUseCase] = useState('');
-  const [visibility, setVisibility] = useState<'public' | 'private'>('public');
+  const [visibility, setVisibility] = useState<Visibility>('public');
+  const [accordionOpen, setAccordionOpen] = useState<string[]>([]);
 
   const [playbooks, setPlaybooks] = useState<Playbook[]>([]);
   const [channels, setChannels] = useState<Channel[]>([]);
   const [boards, setBoards] = useState<Board[]>([]);
 
+  const getChannelForPlaybookKey = (key: string) => {
+    // find playbook
+    const [playbook] = playbooks.filter(pb => pb.id === key);
+    return channels.find(c => c.playbook === playbook.id)!;
+  }
+
   const playbookSaved = (newPb: Playbook) => {
     setPlaybooks([newPb]);
 
     // find the generated channel 
-    const [chan] = channels.filter(c => c.key === PlaybookGeneratedChannelKey)
+    const [chan] = channels.filter(c => c.playbook === newPb.id)
     channelSaved({
       ...chan,
       name: newPb.name,
-      id: `channel-${slufigy(newPb.name)}`,
-      playbook: newPb.id,
     });
   }
 
   const channelSaved = (chan: Channel) => {
-    setChannels(channels.map(c => c.key === chan.key ? chan : c));
+    setChannels(channels.map(c => c.id === chan.id ? chan : c));
   }
 
   const boardSaved = (board: Board) => {
-    setBoards(boards.map(b => b.key === board.key ? board : b));
+    setBoards(boards.map(b => b.id === board.id ? board : b));
   }
 
   const addPlaybook = () => {
+    const pbKey = `playbook-${new Date().getTime()}` 
     setPlaybooks([
       ...playbooks,
       {
-        key: `playbook-${new Date().getTime()}`,
-        id: '',
+        id: pbKey,
         template: '',
         name: '',
         illustration: '',
       }
     ]);
 
+    const chanKey = `channel-${new Date().getTime()}`
     setChannels([
       {
-        key: PlaybookGeneratedChannelKey,
+        id: chanKey,
         illustration: '',
         name: '',
+        playbook: pbKey,
       },
       ...channels,
     ]);
+
+      setAccordionOpen([...accordionOpen, pbKey, chanKey]);
   };
 
   const addChannel = () => {
+    const key = `channel-${new Date().getTime()}`
     setChannels([
       ...channels,
       {
-        key: `channel-${new Date().getTime()}`,
+        id: key,
         illustration: '',
         name: '',
       }
     ]);
+
+      setAccordionOpen([...accordionOpen, key]);
   };
 
   const addBoard = () => {
+    const key = `board-${new Date().getTime()}`
     setBoards([
       ...boards,
       {
-        key: `board-${new Date().getTime()}`,
+        id: key,
         template: '',
         name: '',
         illustration: '',
       }
     ]);
+
+      setAccordionOpen([...accordionOpen, key]);
   };
+
+  const removePlaybook = (key: string) => {
+    setAccordionOpen(accordionOpen.filter(k => k !== key));
+    const chan = getChannelForPlaybookKey(key);
+
+    removeChannel(chan.id);
+    setPlaybooks(playbooks.filter(pb => pb.id !== key));
+  }
+
+  const removeChannel = (key: string) => {
+    setAccordionOpen(accordionOpen.filter(k => k !== key));
+    setChannels(channels.filter(c => c.id !== key));
+  }
+
+  const removeBoard = (key: string) => {
+    setAccordionOpen(accordionOpen.filter(k => k !== key));
+    setChannels(channels.filter(c => c.id !== key));
+    setBoards(boards.filter(b => b.id !== key));
+  }
+
+  const toggleAccordion = (key: string) => {
+    if (accordionOpen.includes(key)) {
+      setAccordionOpen(accordionOpen.filter(k => k !== key));
+    } else {
+      setAccordionOpen([...accordionOpen, key]);
+    }
+  }
 
   return (
     <div className='container'>
       <div className='row'>
         <div className='col-12'>
           <h1>Work Template Generator</h1>
-
         </div>
       </div>
 
@@ -138,7 +177,7 @@ export default function App() {
               onClick={addPlaybook} 
               disabled={playbooks.length === 1}
               >
-                {playbooks.length === 0 ? 'Add a playbook' : 'Max 1 Playbook'}
+                {playbooks.length === 0 ? '+ Add a playbook' : 'Max 1 Playbook'}
               </Button>
               &nbsp;
               <Button color='primary' onClick={addChannel}>+ Add a channel</Button>
@@ -147,105 +186,61 @@ export default function App() {
             </div>
           </div>
 
-          <UncontrolledAccordion
-            stayOpen
-            open={''}
+          <Accordion
+            open={accordionOpen}
+            {...{toggle: toggleAccordion}} // not pretty but reactstrap ts definition is broken https://github.com/reactstrap/reactstrap/issues/2165
             style={{marginTop: '1em'}}
           >
-            {playbooks.map((playbook) => (
-              <>
-                <AccordionHeader targetId={playbook.key}>
-                  Playbook: {playbook.name}
-                </AccordionHeader>
-                <AccordionBody accordionId={playbook.key}>
-                  <PlaybookForm key={playbook.key} playbook={playbook} onPlaybookSaved={playbookSaved} />
-                </AccordionBody>
-              </>
-            ))}
-
-
             {channels.map((channel) => (
               <>
-                <AccordionHeader targetId={channel.key}>
-                  Channel: {channel.name}&nbsp;{channel.playbook && <Badge color='primary'>{channel.playbook}</Badge>}
+                <AccordionHeader targetId={channel.id}>
+                  Channel: {channel.name}&nbsp;{channel.playbook && <Badge color='primary'>from {channel.playbook}</Badge>}
                 </AccordionHeader>
-                <AccordionBody accordionId={channel.key}>
-                  <ChannelForm key={channel.key} isFromPlaybook={channel.key === PlaybookGeneratedChannelKey} channel={channel} onChannelSaved={channelSaved} />
+                <AccordionBody accordionId={channel.id}>
+                  <ChannelForm key={channel.id} channel={channel} onChannelSaved={channelSaved} />
                 </AccordionBody>
               </>
             ))}
 
             {boards.map((board) => (
               <>
-                <AccordionHeader targetId={board.key}>
+                <AccordionHeader targetId={board.id}>
                   Board: {board.name}
                 </AccordionHeader>
-                <AccordionBody accordionId={board.key}>
-                  <BoardForm key={board.key} board={board} channels={channels} onBoardSaved={boardSaved} />
+                <AccordionBody accordionId={board.id}>
+                  <BoardForm key={board.id} board={board} channels={channels} onBoardSaved={boardSaved} />
                 </AccordionBody>
               </>
             ))}
 
-          </UncontrolledAccordion>
+            {playbooks.map((playbook) => (
+              <>
+                <AccordionHeader targetId={playbook.id}>
+                  Playbook: {playbook.name}
+                </AccordionHeader>
+                <AccordionBody accordionId={playbook.id}>
+                  <PlaybookForm key={playbook.id} playbook={playbook} onPlaybookSaved={playbookSaved} />
+                </AccordionBody>
+              </>
+            ))}
+          </Accordion>
         </div>
         <div className='col-4'>
           <div className='row'>
             <div className='col-12'>
-              <h3>Preview</h3>
+              <Preview
+                category={category}
+                useCase={useCase}
+                visibility={visibility}
 
-              <strong>Category: </strong> {category} <br />
-              <strong>Use Case: </strong> {useCase} <br />
-              <strong>Visibility: </strong> {visibility} <br />
+                playbooks={playbooks}
+                channels={channels}
+                boards={boards}
 
-              {channels.length > 0 && (
-                <>
-                  <h5>Channels</h5>
-                  <ul>
-                    {channels.map((channel) => (
-                      <li key={channel.key}>
-                        {channel.name}
-                        {channel.playbook && (
-                          <>
-                            &nbsp;
-                            <Badge>{channel.playbook}</Badge>
-                          </>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-
-              {boards.length > 0 && (
-                <>
-
-                  <h5>Boards</h5>
-                  <ul>
-                    {boards.map((board) => (
-                      <li key={board.key}>
-                        {board.name}
-                        {board.channel && (
-                          <>
-                            &nbsp;
-                            <Badge>{board.channel} </Badge>
-                          </>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-
-              {playbooks.length > 0 && (
-                <>
-                  <h5>Playbooks</h5>
-                  <ul>
-                    {playbooks.map((playbook) => (
-                      <li key={playbook.key}>{playbook.name}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
+                onPlaybookRemoved={removePlaybook}
+                onChannelRemoved={removeChannel}
+                onBoardRemoved={removeBoard}
+              />
             </div>
           </div>
         </div>

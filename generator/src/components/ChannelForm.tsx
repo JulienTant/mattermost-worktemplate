@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import { FormGroup, Input, Label, Badge } from 'reactstrap';
-import { Channel } from './types';
-import { slufigy } from './utils';
+import React from 'react';
+import { FormGroup, Input, Label } from 'reactstrap';
+import { Channel } from '../types';
 
 interface ChannelFormInterface {
     channel: Channel;
-    isFromPlaybook: boolean;
     onChannelSaved: (channel: Channel) => void;
 }
 
@@ -18,27 +16,23 @@ export function ChannelForm(props: ChannelFormInterface) {
             [e.target.name]: e.target.value
         };
 
-        if (e.target.name === 'name') {
-            newChannel.id = `channel-${slufigy(e.target.value)}`;
-        }
-
         props.onChannelSaved(newChannel);
     };
 
-    const disabled = props.isFromPlaybook;
+    const isFromPlaybook = !!channel.playbook;
 
     return (
         <div className='row'>
             <div className='col-12'>
                 <FormGroup>
                     <Label >Name</Label>
-                    <Input type='text' name='name' value={channel.name} onChange={updateChannel} disabled={disabled} />
+                    <Input type='text' name='name' value={channel.name} onChange={updateChannel} disabled={isFromPlaybook} />
                 </FormGroup>
 
-                {!props.isFromPlaybook && (
+                {!isFromPlaybook && (
                     <FormGroup>
                         <Label >Purpose</Label>
-                        <Input type='text' name='purpose' value={channel.purpose} onChange={updateChannel} disabled={disabled} />
+                        <Input type='text' name='purpose' value={channel.purpose} onChange={updateChannel} />
                     </FormGroup>
                 )}
 
