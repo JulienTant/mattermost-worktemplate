@@ -12,6 +12,7 @@ const Categories = [
   { key: 'devops', name: 'Dev Ops' },
   { key: 'company_wide', name: 'Company - Wide' },
   { key: 'leadership', name: 'Leadership' },
+  { key: 'design', name: 'Design' },
 ]
 
 export default function App() {

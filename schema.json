@@ -3,6 +3,10 @@
     "$id": "/work-template",
     "type": "object",
     "properties": {
+        "id": {
+            "type": "string",
+            "minLength": 1
+        },
         "category": {
             "type": "string",
             "enum": [
@@ -40,6 +44,7 @@
         }
     },
     "required": [
+        "id",
         "category",
         "useCase",
         "illustration",
@@ -230,11 +235,6 @@
                             "$ref": "#/$defs/translatableString"
                         }
                     ],
-                    "properties": {
-                        "illustration": {
-                            "type": "string"
-                        }
-                    },
                     "required": [
                         "illustration"
                     ]
@@ -245,16 +245,19 @@
         "translatableString": {
             "type": "object",
             "properties": {
-                "i18nId": {
+                "id": {
                     "type": "string"
                 },
-                "defaultText": {
+                "defaultMessage": {
                     "type": "string",
                     "minLength": 1
+                },
+                "illustration": {
+                    "type": "string"
                 }
             },
             "required": [
-                "defaultText"
+                "defaultMessage"
             ]
         }
     }

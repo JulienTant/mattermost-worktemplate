@@ -1,3 +1,4 @@
+id: "product_teams/feature_release:v1"
 category: product_teams 
 useCase: Feature Release
 illustration: /images/illustrations/feature-release.png
@@ -7,17 +8,17 @@ featureFlag: # optional. only shows this template when the feature flag having i
   value: on
 description:
     channel:
-        i18nId: ""
-        defaultText: "This is the channels section description"
+        id: ""
+        defaultMessage: "This is the channels section description"
     board:
-        i18nId: ""
-        defaultText: "This is the boards section description"
+        id: ""
+        defaultMessage: "This is the boards section description"
     playbook:
-        i18nId: ""
-        defaultText: "This is the playbooks section description"
+        id: ""
+        defaultMessage: "This is the playbooks section description"
     integration:
-        i18nId: ""
-        defaultText: "This is the integrations section description"
+        id: ""
+        defaultMessage: "This is the integrations section description"
         illustration: "/images/worktemplates/integrations/jira-github.png"
 content:
   - channel:
