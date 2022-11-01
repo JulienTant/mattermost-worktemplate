@@ -8,7 +8,7 @@ featureFlag: # optional. only shows this template when the feature flag having i
   value: on
 description:
     channel:
-        id: ""
+        id: "worktemplate.product_teams.description.channel"
         defaultMessage: "This is the channels section description"
     board:
         id: ""
