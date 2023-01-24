@@ -67,9 +67,10 @@ export default function App() {
   const workTemplateId = `${slugify(category)}/${slugify(useCase)}${idSuffix}`;
 
   useEffect(() => {
+    const sCategory = slugify(category);
+    const sUseCase = slugify(useCase);
+
     setDescription((oldDesc) => {
-      const sCategory = slugify(category);
-      const sUseCase = slugify(useCase);
       const prefix = `worktemplate.${sCategory}.${sUseCase}`;
       return {
         ...oldDesc,
@@ -93,7 +94,7 @@ export default function App() {
     });
 
     if (!hasChangedIllustration) {
-      setIllustration(`/static/worktemplates/${slugify(category)}/${slugify(useCase)}.png`);
+      setIllustration(`/static/worktemplates/${sCategory}/${sUseCase}/${sUseCase}.png`);
     }
 
   }, [category, useCase, hasChangedIllustration])
@@ -316,14 +317,14 @@ export default function App() {
 
               {hasFeatureFlag && (
                 <>
-                <FormGroup>
-                  <Label>Feature Flag Name</Label>
-                  <Input type='text' name='feature-flag-name' value={featureFlag.name} onChange={(e) => setFeatureFlag((ff) => {return {...ff, name: e.target.value}})} />
-                </FormGroup>
-                <FormGroup>
-                  <Label>Feature Flag Value</Label>
-                  <Input type='text' name='feature-flag-value' value={featureFlag.value} onChange={(e) => setFeatureFlag((ff) => {return {...ff, value: e.target.value}})} />
-                </FormGroup>
+                  <FormGroup>
+                    <Label>Feature Flag Name</Label>
+                    <Input type='text' name='feature-flag-name' value={featureFlag.name} onChange={(e) => setFeatureFlag((ff) => { return { ...ff, name: e.target.value } })} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Feature Flag Value</Label>
+                    <Input type='text' name='feature-flag-value' value={featureFlag.value} onChange={(e) => setFeatureFlag((ff) => { return { ...ff, value: e.target.value } })} />
+                  </FormGroup>
                 </>
               )}
 
