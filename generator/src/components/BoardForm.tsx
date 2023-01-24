@@ -55,7 +55,7 @@ export function BoardForm(props: BoardFormProps) {
         </FormGroup>
 
         <FormGroup>
-          <Label >Illustration</Label>
+          <Label >Illustration (509x352)</Label>
           <Input type='text' name='illustration' value={board.illustration} onChange={updateBoard} />
         </FormGroup>
 

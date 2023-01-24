@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { FormGroup, ButtonGroup, Label, Input, Button, Badge, AccordionBody, AccordionHeader, Accordion } from 'reactstrap';
 import { BoardForm } from './components/BoardForm';
 import { ChannelForm } from './components/ChannelForm';
+import IntegrationForm from './components/IntegrationForm';
 import { PlaybookForm } from './components/PlaybookForm';
 import Preview from './components/Preview';
-import { Board, Channel, Playbook, Visibility } from './types';
+import { Board, Channel, Description, FeatureFlag, Integration, Playbook, Visibility } from './types';
+import YamlOutput from './components/YamlOutput';
 
+function slugify(txt: string) {
+  return txt.toLowerCase()
+    .replace(/ /g, '_')
+    .replace(/[^\w_]+/g, '');
+}
 
 const Categories = [
   { key: 'product_team', name: 'Product Team' },
@@ -18,12 +25,122 @@ const Categories = [
 export default function App() {
   const [category, setCategory] = useState('');
   const [useCase, setUseCase] = useState('');
+  const [illustration, setIllustration] = useState('');
   const [visibility, setVisibility] = useState<Visibility>('public');
   const [accordionOpen, setAccordionOpen] = useState<string[]>([]);
+
+  const [hasFeatureFlag, setHasFeatureFlag] = useState(false);
+  const [featureFlag, setFeatureFlag] = useState<FeatureFlag>({
+    name: '',
+    value: '',
+  });
 
   const [playbooks, setPlaybooks] = useState<Playbook[]>([]);
   const [channels, setChannels] = useState<Channel[]>([]);
   const [boards, setBoards] = useState<Board[]>([]);
+  const [integrations, setIntegrations] = useState<Integration[]>([]);
+  const [description, setDescription] = useState<Description>({
+    channel: {
+      id: 'worktemplate.[category_id].[work_template_name].channel',
+      defaultMessage: 'Description of why the channel(s) are needed',
+    },
+    board: {
+      id: 'worktemplate.[category_id].[work_template_name].board',
+      defaultMessage: 'Description of why the board(s) are needed',
+    },
+    playbook: {
+      id: 'worktemplate.[category_id].[work_template_name].playbook',
+      defaultMessage: 'Description of why the playbook(s) are needed',
+    },
+    integration: {
+      id: 'worktemplate.[category_id].[work_template_name].integration',
+      defaultMessage: 'Description of why the integration(s) are needed',
+      illustration: '',
+    },
+  });
+
+  let idSuffix = ':v1';
+  if (hasFeatureFlag) {
+    idSuffix = `:v${slugify(featureFlag.name)}=${slugify(featureFlag.value)}`;
+  }
+  const workTemplateId = `${slugify(category)}/${slugify(useCase)}${idSuffix}`;
+
+  useEffect(() => {
+    setDescription((oldDesc) => {
+      const sCategory = slugify(category);
+      const sUseCase = slugify(useCase);
+      const prefix = `worktemplate.${sCategory}.${sUseCase}`;
+      return {
+        ...oldDesc,
+        channel: {
+          ...oldDesc.channel,
+          id: `${prefix}.channel`,
+        },
+        board: {
+          ...oldDesc.board,
+          id: `${prefix}.board`,
+        },
+        playbook: {
+          ...oldDesc.playbook,
+          id: `${prefix}.playbook`,
+        },
+        integration: {
+          ...oldDesc.integration,
+          id: `${prefix}.integration`,
+        },
+      }
+    });
+  }, [category, useCase])
+
+  const onChannelDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDescription((oldDesc) => ({
+      ...oldDesc,
+      channel: {
+        ...oldDesc.channel,
+        defaultMessage: e.target.value,
+      }
+    }));
+  }
+
+  const onBoardDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDescription((oldDesc) => ({
+      ...oldDesc,
+      board: {
+        ...oldDesc.board,
+        defaultMessage: e.target.value,
+      }
+    }));
+  }
+
+  const onPlaybookDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDescription((oldDesc) => ({
+      ...oldDesc,
+      playbook: {
+        ...oldDesc.playbook,
+        defaultMessage: e.target.value,
+      }
+    }));
+  }
+
+  const onIntegrationDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDescription((oldDesc) => ({
+      ...oldDesc,
+      integration: {
+        ...oldDesc.integration,
+        defaultMessage: e.target.value,
+      }
+    }));
+  }
+
+  const onIntegrationIllustrationChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setDescription((oldDesc) => ({
+      ...oldDesc,
+      integration: {
+        ...oldDesc.integration,
+        illustration: e.target.value,
+      }
+    }));
+  }
 
   const getChannelForPlaybookKey = (key: string) => {
     // find playbook
@@ -51,7 +168,7 @@ export default function App() {
   }
 
   const addPlaybook = () => {
-    const pbKey = `playbook-${new Date().getTime()}` 
+    const pbKey = `playbook-${new Date().getTime()}`
     setPlaybooks([
       ...playbooks,
       {
@@ -73,7 +190,7 @@ export default function App() {
       ...channels,
     ]);
 
-      setAccordionOpen([...accordionOpen, pbKey, chanKey]);
+    setAccordionOpen([...accordionOpen, pbKey, chanKey]);
   };
 
   const addChannel = () => {
@@ -87,7 +204,7 @@ export default function App() {
       }
     ]);
 
-      setAccordionOpen([...accordionOpen, key]);
+    setAccordionOpen([...accordionOpen, key]);
   };
 
   const addBoard = () => {
@@ -102,7 +219,7 @@ export default function App() {
       }
     ]);
 
-      setAccordionOpen([...accordionOpen, key]);
+    setAccordionOpen([...accordionOpen, key]);
   };
 
   const removePlaybook = (key: string) => {
@@ -122,6 +239,10 @@ export default function App() {
     setAccordionOpen(accordionOpen.filter(k => k !== key));
     setChannels(channels.filter(c => c.id !== key));
     setBoards(boards.filter(b => b.id !== key));
+  }
+
+  const removeIntegration = (key: string) => {
+    setIntegrations(integrations.filter(i => i.id !== key));
   }
 
   const toggleAccordion = (key: string) => {
@@ -159,6 +280,11 @@ export default function App() {
               </FormGroup>
 
               <FormGroup>
+                <Label>Illustration (204x123)</Label>
+                <Input type='text' name='illustration' value={illustration} onChange={(e) => setIllustration(e.target.value)} />
+              </FormGroup>
+
+              <FormGroup>
                 <Label>Visibility</Label>
                 <div>
                   <ButtonGroup>
@@ -167,16 +293,71 @@ export default function App() {
                   </ButtonGroup>
                 </div>
               </FormGroup>
+
+
+              <FormGroup>
+                <Label>Feature Flag?</Label>
+                <div>
+                  <ButtonGroup>
+                    <Button color='success' outline onClick={() => setHasFeatureFlag(true)} active={hasFeatureFlag}>Yes</Button>
+                    <Button color='danger' outline onClick={() => setHasFeatureFlag(false)} active={!hasFeatureFlag}>No</Button>
+                  </ButtonGroup>
+                </div>
+              </FormGroup>
+
+              {hasFeatureFlag && (
+                <>
+                <FormGroup>
+                  <Label>Feature Flag Name</Label>
+                  <Input type='text' name='feature-flag-name' value={featureFlag.name} onChange={(e) => setFeatureFlag((ff) => {return {...ff, name: e.target.value}})} />
+                </FormGroup>
+                <FormGroup>
+                  <Label>Feature Flag Value</Label>
+                  <Input type='text' name='feature-flag-value' value={featureFlag.value} onChange={(e) => setFeatureFlag((ff) => {return {...ff, value: e.target.value}})} />
+                </FormGroup>
+                </>
+              )}
+
+            </div>
+          </div>
+
+          <div className='row'>
+            <div className='col-12'>
+              <h2>Description</h2>
+              <FormGroup>
+                <Label>Channel</Label>
+                <Input type='text' name='description-channel' value={description.channel.defaultMessage} onChange={onChannelDescriptionChange} />
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Board</Label>
+                <Input type='text' name='description-boards' value={description.board.defaultMessage} onChange={onBoardDescriptionChange} />
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Playbook</Label>
+                <Input type='text' name='description-playbook' value={description.playbook.defaultMessage} onChange={onPlaybookDescriptionChange} />
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Integration description</Label>
+                <Input type='text' name='description-integration' value={description.integration.defaultMessage} onChange={onIntegrationDescriptionChange} />
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Integration illustration (509x352)</Label>
+                <Input type='text' name='illustration-integration' value={description.integration.illustration} onChange={onIntegrationIllustrationChange} />
+              </FormGroup>
             </div>
           </div>
 
           <div className='row'>
             <div className='col-12'>
               <h2>Content</h2>
-              <Button 
-              color='primary' 
-              onClick={addPlaybook} 
-              disabled={playbooks.length === 1}
+              <Button
+                color='primary'
+                onClick={addPlaybook}
+                disabled={playbooks.length === 1}
               >
                 {playbooks.length === 0 ? '+ Add a playbook' : 'Max 1 Playbook'}
               </Button>
@@ -189,8 +370,8 @@ export default function App() {
 
           <Accordion
             open={accordionOpen}
-            {...{toggle: toggleAccordion}} // not pretty but reactstrap ts definition is broken https://github.com/reactstrap/reactstrap/issues/2165
-            style={{marginTop: '1em'}}
+            {...{ toggle: toggleAccordion }} // not pretty but reactstrap ts definition is broken https://github.com/reactstrap/reactstrap/issues/2165
+            style={{ marginTop: '1em' }}
           >
             {channels.map((channel) => (
               <>
@@ -225,6 +406,7 @@ export default function App() {
               </>
             ))}
           </Accordion>
+          <IntegrationForm integrations={integrations} setIntegrations={setIntegrations} />
         </div>
         <div className='col-4'>
           <div className='row'>
@@ -234,19 +416,43 @@ export default function App() {
                 useCase={useCase}
                 visibility={visibility}
 
+                hasFeatureFlag={hasFeatureFlag}
+                featureFlag={featureFlag}
+
                 playbooks={playbooks}
                 channels={channels}
                 boards={boards}
+                integrations={integrations}
 
                 onPlaybookRemoved={removePlaybook}
                 onChannelRemoved={removeChannel}
                 onBoardRemoved={removeBoard}
+                onIntegrationRemoved={removeIntegration}
               />
             </div>
           </div>
+        </div>
+        <div className='col-12'>
+          <YamlOutput
+            workTemplateId={workTemplateId}
+            category={category}
+            useCase={useCase}
+            illustration={illustration}
+            visibility={visibility}
+
+            hasFeatureFlag={hasFeatureFlag}
+            featureFlag={featureFlag}
+
+            description={description}
+
+
+            boards={boards}
+            channels={channels}
+            playbooks={playbooks}
+            integrations={integrations}
+          />
         </div>
       </div>
     </div>
   );
 }
-

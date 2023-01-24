@@ -1,29 +1,35 @@
 import React from 'react'
 import { Badge, Button } from 'reactstrap'
-import { Board, Channel, Playbook, Visibility } from '../types'
+import { Board, Channel, FeatureFlag, Integration, Playbook, Visibility } from '../types'
 
 interface PreviewProps {
     category: string
     useCase: string
     visibility: Visibility;
+
+    hasFeatureFlag: boolean;
+    featureFlag: FeatureFlag;
+
     playbooks: Playbook[]
     channels: Channel[]
     boards: Board[]
+    integrations: Integration[]
 
     onPlaybookRemoved: (key: string) => void
     onChannelRemoved: (key: string) => void
     onBoardRemoved: (key: string) => void
+    onIntegrationRemoved: (id: string) => void
 }
 
 export default function Preview(props: PreviewProps) {
-    const { category, useCase, visibility, playbooks, channels, boards } = props;
+    const { hasFeatureFlag, featureFlag, category, useCase, visibility, playbooks, channels, boards, integrations } = props;
 
     // Can't manually removed the playbook's generated channel
     // Also can't remove a channel that has boards linked to it
     const canRemoveChannel = (chan: Channel) => {
         const boardsUseChannel = boards.some(b => b.channel === chan.id);
         const channelFromPlaybook = !!chan.playbook;
-        
+
         return !boardsUseChannel && !channelFromPlaybook;
     }
 
@@ -42,6 +48,10 @@ export default function Preview(props: PreviewProps) {
             <strong>Category: </strong> {category} <br />
             <strong>Use Case: </strong> {useCase} <br />
             <strong>Visibility: </strong> {visibility} <br />
+
+            {hasFeatureFlag && (
+                <span><strong>Feature Flag: </strong> {featureFlag.name}={featureFlag.value} <br /></span>
+            )}
 
             {
                 channels.length > 0 && (
@@ -122,6 +132,23 @@ export default function Preview(props: PreviewProps) {
                                             x
                                         </Button>
                                     )}
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                )
+            }
+
+            {
+                integrations.length > 0 && (
+                    <>
+                        <h5>Integrations</h5>
+                        <ul>
+                            {integrations.map((integration) => (
+                                <li key={integration.id}>
+                                    {integration.id}
+
+                                    <Button color='danger' size='sm' outline onClick={() => props.onIntegrationRemoved(integration.id)}>x</Button>
                                 </li>
                             ))}
                         </ul>

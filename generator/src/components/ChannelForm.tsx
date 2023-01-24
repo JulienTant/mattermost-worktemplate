@@ -37,7 +37,7 @@ export function ChannelForm(props: ChannelFormInterface) {
                 )}
 
                 <FormGroup>
-                    <Label >Illustration</Label>
+                    <Label >Illustration (509x352)</Label>
                     <Input type='text' name='illustration' value={channel.illustration} onChange={updateChannel} />
                 </FormGroup>
             </div>

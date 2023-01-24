@@ -8,12 +8,12 @@ interface PlaybookFormProps {
 }
 
 const Templates = [
-    { key: 'product-release', name: 'Product Release', illustration: '/test-1.png' },
-    { key: 'incident-resolution', name: 'Incident Resolution', illustration: '' },
-    { key: 'customer-onboarding', name: 'Customer Onboarding', illustration: '' },
-    { key: 'employee-onboarding', name: 'Employee Onboarding', illustration: '' },
-    { key: 'feature-lifecycle', name: 'Feature Lifecycle', illustration: '' },
-    { key: 'bug-bash', name: 'Bug Bash', illustration: '' },
+    { key: 'Product Release', name: 'Product Release', illustration: '/test-1.png' },
+    { key: 'Incident Resolution', name: 'Incident Resolution', illustration: '' },
+    { key: 'Customer Onboarding', name: 'Customer Onboarding', illustration: '' },
+    { key: 'Employee Onboarding', name: 'Employee Onboarding', illustration: '' },
+    { key: 'Feature Lifecycle', name: 'Feature Lifecycle', illustration: '' },
+    { key: 'Bug Bash', name: 'Bug Bash', illustration: '' },
 ]
 
 export function PlaybookForm(props: PlaybookFormProps) {
@@ -59,7 +59,7 @@ export function PlaybookForm(props: PlaybookFormProps) {
                 </FormGroup>
 
                 <FormGroup>
-                    <Label >Illustration</Label>
+                    <Label >Illustration (509x352)</Label>
                     <Input type='text' name='illustration' value={playbook.illustration} onChange={updatePlaybook} />
                 </FormGroup>
             </div>
