@@ -56,7 +56,7 @@ export default function App() {
     integration: {
       id: 'worktemplate.[category_id].[work_template_name].integration',
       defaultMessage: 'Description of why the integration(s) are needed',
-      illustration: '/images/worktemplates/{FIXME}.png',
+      illustration: '/static/worktemplates/{FIXME}.png',
     },
   });
 
@@ -93,7 +93,7 @@ export default function App() {
     });
 
     if (!hasChangedIllustration) {
-      setIllustration(`/images/worktemplates/${slugify(category)}/${slugify(useCase)}.png`);
+      setIllustration(`/static/worktemplates/${slugify(category)}/${slugify(useCase)}.png`);
     }
 
   }, [category, useCase, hasChangedIllustration])

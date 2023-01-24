@@ -8,12 +8,12 @@ interface PlaybookFormProps {
 }
 
 const Templates = [
-    { key: 'Product Release', name: 'Product Release', illustration: '/images/worktemplates/playbook/product-release.png' },
-    { key: 'Incident Resolution', name: 'Incident Resolution', illustration: '/images/worktemplates/playbook/incident-resolution.png' },
-    { key: 'Customer Onboarding', name: 'Customer Onboarding', illustration: '/images/worktemplates/playbook/customer-onboarding.png' },
-    { key: 'Employee Onboarding', name: 'Employee Onboarding', illustration: '/images/worktemplates/playbook/employee-onboarding.png' },
-    { key: 'Feature Lifecycle', name: 'Feature Lifecycle', illustration: '/images/worktemplates/playbook/feature-lifecycle.png' },
-    { key: 'Bug Bash', name: 'Bug Bash', illustration: '/images/worktemplates/playbook/bug-bash.png' },
+    { key: 'Product Release', name: 'Product Release', illustration: '/static/worktemplates/playbook/product-release.png' },
+    { key: 'Incident Resolution', name: 'Incident Resolution', illustration: '/static/worktemplates/playbook/incident-resolution.png' },
+    { key: 'Customer Onboarding', name: 'Customer Onboarding', illustration: '/static/worktemplates/playbook/customer-onboarding.png' },
+    { key: 'Employee Onboarding', name: 'Employee Onboarding', illustration: '/static/worktemplates/playbook/employee-onboarding.png' },
+    { key: 'Feature Lifecycle', name: 'Feature Lifecycle', illustration: '/static/worktemplates/playbook/feature-lifecycle.png' },
+    { key: 'Bug Bash', name: 'Bug Bash', illustration: '/static/worktemplates/playbook/bug-bash.png' },
 ]
 
 export function PlaybookForm(props: PlaybookFormProps) {
