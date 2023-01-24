@@ -26,6 +26,7 @@ export default function App() {
   const [category, setCategory] = useState('');
   const [useCase, setUseCase] = useState('');
   const [illustration, setIllustration] = useState('');
+  const [hasChangedIllustration, setHasChangedIllustration] = useState(false);
   const [visibility, setVisibility] = useState<Visibility>('public');
   const [accordionOpen, setAccordionOpen] = useState<string[]>([]);
 
@@ -55,7 +56,7 @@ export default function App() {
     integration: {
       id: 'worktemplate.[category_id].[work_template_name].integration',
       defaultMessage: 'Description of why the integration(s) are needed',
-      illustration: '',
+      illustration: '/images/worktemplates/{FIXME}.png',
     },
   });
 
@@ -90,7 +91,12 @@ export default function App() {
         },
       }
     });
-  }, [category, useCase])
+
+    if (!hasChangedIllustration) {
+      setIllustration(`/images/worktemplates/${slugify(category)}/${slugify(useCase)}.png`);
+    }
+
+  }, [category, useCase, hasChangedIllustration])
 
   const onChannelDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription((oldDesc) => ({
@@ -281,7 +287,10 @@ export default function App() {
 
               <FormGroup>
                 <Label>Illustration (204x123)</Label>
-                <Input type='text' name='illustration' value={illustration} onChange={(e) => setIllustration(e.target.value)} />
+                <Input type='text' name='illustration' value={illustration} onChange={(e) => {
+                  setHasChangedIllustration(true);
+                  setIllustration(e.target.value)
+                }} />
               </FormGroup>
 
               <FormGroup>
