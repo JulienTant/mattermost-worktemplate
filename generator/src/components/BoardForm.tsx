@@ -11,12 +11,12 @@ interface BoardFormProps {
 // Key is the [properties.trackingTemplateId] of the template.
 // Stored on team 0
 const Templates = [
-  { key: "54fcf9c610f0ac5e4c522c0657c90602", name: "Meeting Agenda", illustration: "/static/worktemplates/board/meeting-agenda.png" },
-  { key: "dfb70c146a4584b8a21837477c7b5431", name: "Personal Tasks", illustration: "/static/worktemplates/board/personal-tasks.png" },
-  { key: "a4ec399ab4f2088b1051c3cdf1dde4c3", name: "Project Tasks", illustration: "/static/worktemplates/board/project-tasks.png" },
-  { key: "7f32dc8d2ae008cfe56554e9363505cc", name: "Personal Goals", illustration: "/static/worktemplates/board/personal-goals.png" },
-  { key: "c75fbd659d2258b5183af2236d176ab4", name: "Content Calendar", illustration: "/static/worktemplates/board/content-calendar.png" },
-  { key: "b728c6ca730e2cfc229741c5a4712b65", name: "Roadmap", illustration: "/static/worktemplates/board/roadmap.png" },
+  { key: "54fcf9c610f0ac5e4c522c0657c90602", name: "Meeting Agenda" },
+  { key: "dfb70c146a4584b8a21837477c7b5431", name: "Personal Tasks" },
+  { key: "a4ec399ab4f2088b1051c3cdf1dde4c3", name: "Project Tasks" },
+  { key: "7f32dc8d2ae008cfe56554e9363505cc", name: "Personal Goals" },
+  { key: "c75fbd659d2258b5183af2236d176ab4", name: "Content Calendar" },
+  { key: "b728c6ca730e2cfc229741c5a4712b65", name: "Roadmap" },
 ]
 
 export function BoardForm(props: BoardFormProps) {
@@ -27,10 +27,6 @@ export function BoardForm(props: BoardFormProps) {
       ...board,
       [e.target.name]: e.target.value
     };
-
-    if (e.target.name === 'template' && newBoard.illustration === '') {
-      newBoard.illustration = Templates.find(t => t.key === newBoard.template)?.illustration || '';
-    }
 
     props.onBoardSaved(newBoard);
   };

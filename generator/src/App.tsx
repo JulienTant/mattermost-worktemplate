@@ -59,19 +59,20 @@ export default function App() {
       illustration: '/static/worktemplates/{FIXME}.png',
     },
   });
+  const [hasChangedIntegrationIllustration, setHasChangedIntegrationIllustration] = useState(false);
+
 
   let idSuffix = ':v1';
   if (hasFeatureFlag) {
     idSuffix = `:v${slugify(featureFlag.name)}=${slugify(featureFlag.value)}`;
   }
   const workTemplateId = `${slugify(category)}/${slugify(useCase)}${idSuffix}`;
+  const slugCategory = slugify(category);
+  const slugUseCase = slugify(useCase);
 
   useEffect(() => {
-    const sCategory = slugify(category);
-    const sUseCase = slugify(useCase);
-
     setDescription((oldDesc) => {
-      const prefix = `worktemplate.${sCategory}.${sUseCase}`;
+      const prefix = `worktemplate.${slugCategory}.${slugUseCase}`;
       return {
         ...oldDesc,
         channel: {
@@ -89,15 +90,16 @@ export default function App() {
         integration: {
           ...oldDesc.integration,
           id: `${prefix}.integration`,
+          illustration: (hasChangedIllustration ? oldDesc.integration.illustration : `/static/worktemplates/${slugCategory}/${slugUseCase}/integrations.png`)
         },
       }
     });
 
     if (!hasChangedIllustration) {
-      setIllustration(`/static/worktemplates/${sCategory}/${sUseCase}/${sUseCase}.png`);
+      setIllustration(`/static/worktemplates/${slugCategory}/${slugUseCase}/${slugUseCase}.png`);
     }
 
-  }, [category, useCase, hasChangedIllustration])
+  }, [category, useCase, hasChangedIllustration, hasChangedIntegrationIllustration])
 
   const onChannelDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription((oldDesc) => ({
@@ -140,6 +142,7 @@ export default function App() {
   }
 
   const onIntegrationIllustrationChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setHasChangedIntegrationIllustration(true);
     setDescription((oldDesc) => ({
       ...oldDesc,
       integration: {
@@ -181,8 +184,8 @@ export default function App() {
       {
         id: pbKey,
         template: '',
-        name: '',
-        illustration: '',
+        name: 'New Playbook',
+        illustration: `/static/worktemplates/${slugCategory}/${slugUseCase}/${pbKey}.png`,
       }
     ]);
 
@@ -190,8 +193,8 @@ export default function App() {
     setChannels([
       {
         id: chanKey,
-        illustration: '',
-        name: '',
+        illustration: `/static/worktemplates/${slugCategory}/${slugUseCase}/${chanKey}.png`,
+        name: 'New Playbook',
         playbook: pbKey,
       },
       ...channels,
@@ -206,8 +209,8 @@ export default function App() {
       ...channels,
       {
         id: key,
-        illustration: '',
-        name: '',
+        illustration: `/static/worktemplates/${slugCategory}/${slugUseCase}/${key}.png`,
+        name: 'New Channel',
       }
     ]);
 
@@ -221,8 +224,8 @@ export default function App() {
       {
         id: key,
         template: '',
-        name: '',
-        illustration: '',
+        name: 'New Board',
+        illustration: `/static/worktemplates/${slugCategory}/${slugUseCase}/${key}.png`,
       }
     ]);
 

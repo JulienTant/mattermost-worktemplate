@@ -2,7 +2,16 @@ import React, { ChangeEvent } from 'react';
 import { FormGroup, Input, Label } from "reactstrap";
 import { Integration } from '../types';
 
-
+const Templates = [{
+    id: 'jira',
+    name: 'Jira'
+}, {
+    id: 'github',
+    name: 'GitHub'
+}, {
+    id: 'zoom',
+    name: 'Zoom'
+}]
 
 export default function IntegrationForm({integrations, setIntegrations} : {integrations: Integration[], setIntegrations: (integrations: Integration[]) => void}) {
     const formIntegrations = integrations.map(i => i.id);
@@ -26,12 +35,9 @@ export default function IntegrationForm({integrations, setIntegrations} : {integ
                 // @ts-ignore
                 onChange={handleOnChange}
             >
-                <option value='github'>
-                    GitHub
-                </option>
-                <option value='jira'>
-                    Jira
-                </option>
+                {Templates.map((template) => (
+                    <option key={template.id} value={template.id}>{template.name}</option>
+                ))}
             </Input>
         </FormGroup>
     )
