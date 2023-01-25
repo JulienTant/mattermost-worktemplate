@@ -99,7 +99,7 @@ export default function App() {
       setIllustration(`/static/worktemplates/${slugCategory}/${slugUseCase}/${slugUseCase}.png`);
     }
 
-  }, [category, useCase, hasChangedIllustration, hasChangedIntegrationIllustration])
+  }, [slugCategory, slugUseCase, hasChangedIllustration, hasChangedIntegrationIllustration])
 
   const onChannelDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription((oldDesc) => ({
