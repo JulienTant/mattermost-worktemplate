@@ -11,12 +11,18 @@ interface BoardFormProps {
 // Key is the [properties.trackingTemplateId] of the template.
 // Stored on team 0
 const Templates = [
-  { key: '54fcf9c610f0ac5e4c522c0657c90602', name: 'Meeting Agenda' },
-  { key: 'dfb70c146a4584b8a21837477c7b5431', name: 'Personal Tasks' },
-  { key: 'a4ec399ab4f2088b1051c3cdf1dde4c3', name: 'Project Tasks' },
-  { key: '7f32dc8d2ae008cfe56554e9363505cc', name: 'Personal Goals' },
-  { key: 'c75fbd659d2258b5183af2236d176ab4', name: 'Content Calendar' },
-  { key: 'b728c6ca730e2cfc229741c5a4712b65', name: 'Roadmap' },
+  { name: 'Company Goals & OKRs', key: '7ba22ccfdfac391d63dea5c4b8cde0de' },
+  { name: 'Competitive Analysis', key: '06f4bff367a7c2126fab2380c9dec23c' },
+  { name: 'Content Calendar ', key: 'c75fbd659d2258b5183af2236d176ab4' },
+  { name: 'Meeting Agenda ', key: '54fcf9c610f0ac5e4c522c0657c90602' },
+  { name: 'Personal Goals ', key: '7f32dc8d2ae008cfe56554e9363505cc' },
+  { name: 'Personal Tasks ', key: 'dfb70c146a4584b8a21837477c7b5431' },
+  { name: 'Project Tasks ', key: 'a4ec399ab4f2088b1051c3cdf1dde4c3' },
+  { name: 'Roadmap ', key: 'b728c6ca730e2cfc229741c5a4712b65' },
+  { name: 'Sales Pipeline CRM', key: 'ecc250bb7dff0fe02247f1110f097544' },
+  { name: 'Sprint Planner ', key: '99b74e26d2f5d0a9b346d43c0a7bfb09' },
+  { name: 'Team Retrospective', key: 'e4f03181c4ced8edd4d53d33d569a086' },
+  { name: 'User Research Sessions', key: '6c345c7f50f6833f78b7d0f08ce450a3' },
 ];
 
 export function BoardForm(props: BoardFormProps) {
