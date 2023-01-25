@@ -5,7 +5,6 @@ export interface Playbook {
   id: string;
 }
 
-
 export interface Channel {
   name: string;
   illustration: string;
@@ -18,8 +17,8 @@ export interface Board {
   template: string;
   name: string;
   illustration: string;
-  channel?: string
-  id: string
+  channel?: string;
+  id: string;
 }
 
 export interface Integration {

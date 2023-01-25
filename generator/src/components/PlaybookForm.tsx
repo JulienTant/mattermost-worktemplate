@@ -3,53 +3,70 @@ import { FormGroup, Label, Input } from 'reactstrap';
 import { Playbook } from '../types';
 
 interface PlaybookFormProps {
-    playbook: Playbook;
-    onPlaybookSaved: (playbook: Playbook) => void;
+  playbook: Playbook;
+  onPlaybookSaved: (playbook: Playbook) => void;
 }
 
 const Templates = [
-    { key: 'Product Release', name: 'Product Release' },
-    { key: 'Incident Resolution', name: 'Incident Resolution' },
-    { key: 'Customer Onboarding', name: 'Customer Onboarding' },
-    { key: 'Employee Onboarding', name: 'Employee Onboarding' },
-    { key: 'Feature Lifecycle', name: 'Feature Lifecycle' },
-    { key: 'Bug Bash', name: 'Bug Bash' },
-]
+  { key: 'Product Release', name: 'Product Release' },
+  { key: 'Incident Resolution', name: 'Incident Resolution' },
+  { key: 'Customer Onboarding', name: 'Customer Onboarding' },
+  { key: 'Employee Onboarding', name: 'Employee Onboarding' },
+  { key: 'Feature Lifecycle', name: 'Feature Lifecycle' },
+  { key: 'Bug Bash', name: 'Bug Bash' },
+];
 
 export function PlaybookForm(props: PlaybookFormProps) {
-    const playbook = props.playbook;
-    const updatePlaybook = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let newPlaybook = {
-            ...playbook,
-            [e.target.name]: e.target.value
-        };
-
-        props.onPlaybookSaved(newPlaybook);
+  const playbook = props.playbook;
+  const updatePlaybook = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newPlaybook = {
+      ...playbook,
+      [e.target.name]: e.target.value,
     };
 
-    return (
-        <div className='row'>
-            <div className='col-12'>
-                <FormGroup>
-                    <Label>Template</Label>
-                    <Input type='select' name='template' value={playbook.template} onChange={updatePlaybook}>
-                        <option value={''}></option>
-                        {Templates.map((template) => (
-                            <option key={template.key} value={template.key}>{template.name}</option>
-                        ))}
-                    </Input>
-                </FormGroup>
+    props.onPlaybookSaved(newPlaybook);
+  };
 
-                <FormGroup>
-                    <Label >Name</Label>
-                    <Input type='text' name='name' value={playbook.name} onChange={updatePlaybook} />
-                </FormGroup>
+  return (
+    <div className="row">
+      <div className="col-12">
+        <FormGroup>
+          <Label>Template</Label>
+          <Input
+            type="select"
+            name="template"
+            value={playbook.template}
+            onChange={updatePlaybook}
+          >
+            <option value={''}></option>
+            {Templates.map((template) => (
+              <option key={template.key} value={template.key}>
+                {template.name}
+              </option>
+            ))}
+          </Input>
+        </FormGroup>
 
-                <FormGroup>
-                    <Label >Illustration (509x352)</Label>
-                    <Input type='text' name='illustration' value={playbook.illustration} onChange={updatePlaybook} />
-                </FormGroup>
-            </div>
-        </div>
-    );
+        <FormGroup>
+          <Label>Name</Label>
+          <Input
+            type="text"
+            name="name"
+            value={playbook.name}
+            onChange={updatePlaybook}
+          />
+        </FormGroup>
+
+        <FormGroup>
+          <Label>Illustration (509x352)</Label>
+          <Input
+            type="text"
+            name="illustration"
+            value={playbook.illustration}
+            onChange={updatePlaybook}
+          />
+        </FormGroup>
+      </div>
+    </div>
+  );
 }

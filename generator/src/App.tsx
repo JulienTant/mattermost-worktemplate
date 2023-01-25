@@ -1,15 +1,34 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { FormGroup, ButtonGroup, Label, Input, Button, Badge, AccordionBody, AccordionHeader, Accordion } from 'reactstrap';
+import {
+  FormGroup,
+  ButtonGroup,
+  Label,
+  Input,
+  Button,
+  Badge,
+  AccordionBody,
+  AccordionHeader,
+  Accordion,
+} from 'reactstrap';
 import { BoardForm } from './components/BoardForm';
 import { ChannelForm } from './components/ChannelForm';
 import IntegrationForm from './components/IntegrationForm';
 import { PlaybookForm } from './components/PlaybookForm';
 import Preview from './components/Preview';
-import { Board, Channel, Description, FeatureFlag, Integration, Playbook, Visibility } from './types';
+import {
+  Board,
+  Channel,
+  Description,
+  FeatureFlag,
+  Integration,
+  Playbook,
+  Visibility,
+} from './types';
 import YamlOutput from './components/YamlOutput';
 
 function slugify(txt: string) {
-  return txt.toLowerCase()
+  return txt
+    .toLowerCase()
     .replace(/ /g, '_')
     .replace(/[^\w_]+/g, '');
 }
@@ -20,7 +39,7 @@ const Categories = [
   { key: 'company_wide', name: 'Company - Wide' },
   { key: 'leadership', name: 'Leadership' },
   { key: 'design', name: 'Design' },
-]
+];
 
 export default function App() {
   const [category, setCategory] = useState('');
@@ -59,8 +78,10 @@ export default function App() {
       illustration: '/static/worktemplates/{FIXME}.png',
     },
   });
-  const [hasChangedIntegrationIllustration, setHasChangedIntegrationIllustration] = useState(false);
-
+  const [
+    hasChangedIntegrationIllustration,
+    setHasChangedIntegrationIllustration,
+  ] = useState(false);
 
   let idSuffix = ':v1';
   if (hasFeatureFlag) {
@@ -90,16 +111,24 @@ export default function App() {
         integration: {
           ...oldDesc.integration,
           id: `${prefix}.integration`,
-          illustration: (hasChangedIllustration ? oldDesc.integration.illustration : `/static/worktemplates/${slugCategory}/${slugUseCase}/integrations.png`)
+          illustration: hasChangedIllustration
+            ? oldDesc.integration.illustration
+            : `/static/worktemplates/${slugCategory}/${slugUseCase}/integrations.png`,
         },
-      }
+      };
     });
 
     if (!hasChangedIllustration) {
-      setIllustration(`/static/worktemplates/${slugCategory}/${slugUseCase}/${slugUseCase}.png`);
+      setIllustration(
+        `/static/worktemplates/${slugCategory}/${slugUseCase}/${slugUseCase}.png`,
+      );
     }
-
-  }, [slugCategory, slugUseCase, hasChangedIllustration, hasChangedIntegrationIllustration])
+  }, [
+    slugCategory,
+    slugUseCase,
+    hasChangedIllustration,
+    hasChangedIntegrationIllustration,
+  ]);
 
   const onChannelDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription((oldDesc) => ({
@@ -107,9 +136,9 @@ export default function App() {
       channel: {
         ...oldDesc.channel,
         defaultMessage: e.target.value,
-      }
+      },
     }));
-  }
+  };
 
   const onBoardDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription((oldDesc) => ({
@@ -117,9 +146,9 @@ export default function App() {
       board: {
         ...oldDesc.board,
         defaultMessage: e.target.value,
-      }
+      },
     }));
-  }
+  };
 
   const onPlaybookDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription((oldDesc) => ({
@@ -127,9 +156,9 @@ export default function App() {
       playbook: {
         ...oldDesc.playbook,
         defaultMessage: e.target.value,
-      }
+      },
     }));
-  }
+  };
 
   const onIntegrationDescriptionChange = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription((oldDesc) => ({
@@ -137,48 +166,50 @@ export default function App() {
       integration: {
         ...oldDesc.integration,
         defaultMessage: e.target.value,
-      }
+      },
     }));
-  }
+  };
 
-  const onIntegrationIllustrationChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onIntegrationIllustrationChange = (
+    e: ChangeEvent<HTMLInputElement>,
+  ) => {
     setHasChangedIntegrationIllustration(true);
     setDescription((oldDesc) => ({
       ...oldDesc,
       integration: {
         ...oldDesc.integration,
         illustration: e.target.value,
-      }
+      },
     }));
-  }
+  };
 
   const getChannelForPlaybookKey = (key: string) => {
     // find playbook
-    const [playbook] = playbooks.filter(pb => pb.id === key);
-    return channels.find(c => c.playbook === playbook.id)!;
-  }
+    const [playbook] = playbooks.filter((pb) => pb.id === key);
+    return channels.find((c) => c.playbook === playbook.id)!;
+  };
 
   const playbookSaved = (newPb: Playbook) => {
     setPlaybooks([newPb]);
 
-    // find the generated channel 
-    const [chan] = channels.filter(c => c.playbook === newPb.id)
+    // find the generated channel
+    const [chan] = channels.filter((c) => c.playbook === newPb.id);
     channelSaved({
       ...chan,
       name: newPb.name,
     });
-  }
+  };
 
   const channelSaved = (chan: Channel) => {
-    setChannels(channels.map(c => c.id === chan.id ? chan : c));
-  }
+    setChannels(channels.map((c) => (c.id === chan.id ? chan : c)));
+  };
 
   const boardSaved = (board: Board) => {
-    setBoards(boards.map(b => b.id === board.id ? board : b));
-  }
+    setBoards(boards.map((b) => (b.id === board.id ? board : b)));
+  };
 
   const addPlaybook = () => {
-    const pbKey = `playbook-${new Date().getTime()}`
+    const pbKey = `playbook-${new Date().getTime()}`;
     setPlaybooks([
       ...playbooks,
       {
@@ -186,10 +217,10 @@ export default function App() {
         template: '',
         name: 'New Playbook',
         illustration: `/static/worktemplates/${slugCategory}/${slugUseCase}/${pbKey}.png`,
-      }
+      },
     ]);
 
-    const chanKey = `channel-${new Date().getTime()}`
+    const chanKey = `channel-${new Date().getTime()}`;
     setChannels([
       {
         id: chanKey,
@@ -204,21 +235,21 @@ export default function App() {
   };
 
   const addChannel = () => {
-    const key = `channel-${new Date().getTime()}`
+    const key = `channel-${new Date().getTime()}`;
     setChannels([
       ...channels,
       {
         id: key,
         illustration: `/static/worktemplates/${slugCategory}/${slugUseCase}/${key}.png`,
         name: 'New Channel',
-      }
+      },
     ]);
 
     setAccordionOpen([...accordionOpen, key]);
   };
 
   const addBoard = () => {
-    const key = `board-${new Date().getTime()}`
+    const key = `board-${new Date().getTime()}`;
     setBoards([
       ...boards,
       {
@@ -226,94 +257,139 @@ export default function App() {
         template: '',
         name: 'New Board',
         illustration: `/static/worktemplates/${slugCategory}/${slugUseCase}/${key}.png`,
-      }
+      },
     ]);
 
     setAccordionOpen([...accordionOpen, key]);
   };
 
   const removePlaybook = (key: string) => {
-    setAccordionOpen(accordionOpen.filter(k => k !== key));
+    setAccordionOpen(accordionOpen.filter((k) => k !== key));
     const chan = getChannelForPlaybookKey(key);
 
     removeChannel(chan.id);
-    setPlaybooks(playbooks.filter(pb => pb.id !== key));
-  }
+    setPlaybooks(playbooks.filter((pb) => pb.id !== key));
+  };
 
   const removeChannel = (key: string) => {
-    setAccordionOpen(accordionOpen.filter(k => k !== key));
-    setChannels(channels.filter(c => c.id !== key));
-  }
+    setAccordionOpen(accordionOpen.filter((k) => k !== key));
+    setChannels(channels.filter((c) => c.id !== key));
+  };
 
   const removeBoard = (key: string) => {
-    setAccordionOpen(accordionOpen.filter(k => k !== key));
-    setChannels(channels.filter(c => c.id !== key));
-    setBoards(boards.filter(b => b.id !== key));
-  }
+    setAccordionOpen(accordionOpen.filter((k) => k !== key));
+    setChannels(channels.filter((c) => c.id !== key));
+    setBoards(boards.filter((b) => b.id !== key));
+  };
 
   const removeIntegration = (key: string) => {
-    setIntegrations(integrations.filter(i => i.id !== key));
-  }
+    setIntegrations(integrations.filter((i) => i.id !== key));
+  };
 
   const toggleAccordion = (key: string) => {
     if (accordionOpen.includes(key)) {
-      setAccordionOpen(accordionOpen.filter(k => k !== key));
+      setAccordionOpen(accordionOpen.filter((k) => k !== key));
     } else {
       setAccordionOpen([...accordionOpen, key]);
     }
-  }
+  };
 
   return (
-    <div className='container'>
-      <div className='row'>
-        <div className='col-12'>
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
           <h1>Work Template Generator</h1>
         </div>
       </div>
 
-      <div className='row' style={{ marginTop: '1em' }}>
-        <div className='col-8'>
-
-          <div className='row'>
-            <div className='col-12'>
+      <div className="row" style={{ marginTop: '1em' }}>
+        <div className="col-8">
+          <div className="row">
+            <div className="col-12">
               <FormGroup>
                 <Label>Category</Label>
-                <Input type='select' name='category' value={category} onChange={(e) => setCategory(e.target.value)}>
-                  <option value=''>Select a category</option>
-                  {Categories.map(c => <option key={c.key} value={c.key}>{c.name}</option>)}
+                <Input
+                  type="select"
+                  name="category"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  <option value="">Select a category</option>
+                  {Categories.map((c) => (
+                    <option key={c.key} value={c.key}>
+                      {c.name}
+                    </option>
+                  ))}
                 </Input>
               </FormGroup>
 
               <FormGroup>
                 <Label>Use Case</Label>
-                <Input type='text' name='use-case' value={useCase} onChange={(e) => setUseCase(e.target.value)} />
+                <Input
+                  type="text"
+                  name="use-case"
+                  value={useCase}
+                  onChange={(e) => setUseCase(e.target.value)}
+                />
               </FormGroup>
 
               <FormGroup>
                 <Label>Illustration (204x123)</Label>
-                <Input type='text' name='illustration' value={illustration} onChange={(e) => {
-                  setHasChangedIllustration(true);
-                  setIllustration(e.target.value)
-                }} />
+                <Input
+                  type="text"
+                  name="illustration"
+                  value={illustration}
+                  onChange={(e) => {
+                    setHasChangedIllustration(true);
+                    setIllustration(e.target.value);
+                  }}
+                />
               </FormGroup>
 
               <FormGroup>
                 <Label>Visibility</Label>
                 <div>
                   <ButtonGroup>
-                    <Button color='success' outline onClick={() => setVisibility('public')} active={visibility === 'public'}>Public</Button>
-                    <Button color='danger' outline onClick={() => setVisibility('private')} active={visibility === 'private'}>Private</Button>
+                    <Button
+                      color="success"
+                      outline
+                      onClick={() => setVisibility('public')}
+                      active={visibility === 'public'}
+                    >
+                      Public
+                    </Button>
+                    <Button
+                      color="danger"
+                      outline
+                      onClick={() => setVisibility('private')}
+                      active={visibility === 'private'}
+                    >
+                      Private
+                    </Button>
                   </ButtonGroup>
                 </div>
               </FormGroup>
-
 
               <FormGroup>
                 <Label>Feature Flag?</Label>
                 <div>
                   <ButtonGroup>
-                    <Button color='success' outline onClick={() => setHasFeatureFlag(true)} active={hasFeatureFlag}>Yes</Button>
-                    <Button color='danger' outline onClick={() => setHasFeatureFlag(false)} active={!hasFeatureFlag}>No</Button>
+                    <Button
+                      color="success"
+                      outline
+                      onClick={() => setHasFeatureFlag(true)}
+                      active={hasFeatureFlag}
+                    >
+                      Yes
+                    </Button>
+                    <Button
+                      color="danger"
+                      outline
+                      onClick={() => setHasFeatureFlag(false)}
+                      active={!hasFeatureFlag}
+                    >
+                      No
+                    </Button>
                   </ButtonGroup>
                 </div>
               </FormGroup>
@@ -322,62 +398,108 @@ export default function App() {
                 <>
                   <FormGroup>
                     <Label>Feature Flag Name</Label>
-                    <Input type='text' name='feature-flag-name' value={featureFlag.name} onChange={(e) => setFeatureFlag((ff) => { return { ...ff, name: e.target.value } })} />
+                    <Input
+                      type="text"
+                      name="feature-flag-name"
+                      value={featureFlag.name}
+                      onChange={(e) =>
+                        setFeatureFlag((ff) => {
+                          return { ...ff, name: e.target.value };
+                        })
+                      }
+                    />
                   </FormGroup>
                   <FormGroup>
                     <Label>Feature Flag Value</Label>
-                    <Input type='text' name='feature-flag-value' value={featureFlag.value} onChange={(e) => setFeatureFlag((ff) => { return { ...ff, value: e.target.value } })} />
+                    <Input
+                      type="text"
+                      name="feature-flag-value"
+                      value={featureFlag.value}
+                      onChange={(e) =>
+                        setFeatureFlag((ff) => {
+                          return { ...ff, value: e.target.value };
+                        })
+                      }
+                    />
                   </FormGroup>
                 </>
               )}
-
             </div>
           </div>
 
-          <div className='row'>
-            <div className='col-12'>
+          <div className="row">
+            <div className="col-12">
               <h2>Description</h2>
               <FormGroup>
                 <Label>Channel</Label>
-                <Input type='text' name='description-channel' value={description.channel.defaultMessage} onChange={onChannelDescriptionChange} />
+                <Input
+                  type="text"
+                  name="description-channel"
+                  value={description.channel.defaultMessage}
+                  onChange={onChannelDescriptionChange}
+                />
               </FormGroup>
 
               <FormGroup>
                 <Label>Board</Label>
-                <Input type='text' name='description-boards' value={description.board.defaultMessage} onChange={onBoardDescriptionChange} />
+                <Input
+                  type="text"
+                  name="description-boards"
+                  value={description.board.defaultMessage}
+                  onChange={onBoardDescriptionChange}
+                />
               </FormGroup>
 
               <FormGroup>
                 <Label>Playbook</Label>
-                <Input type='text' name='description-playbook' value={description.playbook.defaultMessage} onChange={onPlaybookDescriptionChange} />
+                <Input
+                  type="text"
+                  name="description-playbook"
+                  value={description.playbook.defaultMessage}
+                  onChange={onPlaybookDescriptionChange}
+                />
               </FormGroup>
 
               <FormGroup>
                 <Label>Integration description</Label>
-                <Input type='text' name='description-integration' value={description.integration.defaultMessage} onChange={onIntegrationDescriptionChange} />
+                <Input
+                  type="text"
+                  name="description-integration"
+                  value={description.integration.defaultMessage}
+                  onChange={onIntegrationDescriptionChange}
+                />
               </FormGroup>
 
               <FormGroup>
                 <Label>Integration illustration (509x352)</Label>
-                <Input type='text' name='illustration-integration' value={description.integration.illustration} onChange={onIntegrationIllustrationChange} />
+                <Input
+                  type="text"
+                  name="illustration-integration"
+                  value={description.integration.illustration}
+                  onChange={onIntegrationIllustrationChange}
+                />
               </FormGroup>
             </div>
           </div>
 
-          <div className='row'>
-            <div className='col-12'>
+          <div className="row">
+            <div className="col-12">
               <h2>Content</h2>
               <Button
-                color='primary'
+                color="primary"
                 onClick={addPlaybook}
                 disabled={playbooks.length === 1}
               >
                 {playbooks.length === 0 ? '+ Add a playbook' : 'Max 1 Playbook'}
               </Button>
               &nbsp;
-              <Button color='primary' onClick={addChannel}>+ Add a channel</Button>
+              <Button color="primary" onClick={addChannel}>
+                + Add a channel
+              </Button>
               &nbsp;
-              <Button color='primary' onClick={addBoard}>+ Add a board</Button>
+              <Button color="primary" onClick={addBoard}>
+                + Add a board
+              </Button>
             </div>
           </div>
 
@@ -389,10 +511,17 @@ export default function App() {
             {channels.map((channel) => (
               <>
                 <AccordionHeader targetId={channel.id}>
-                  Channel: {channel.name}&nbsp;{channel.playbook && <Badge color='primary'>from {channel.playbook}</Badge>}
+                  Channel: {channel.name}&nbsp;
+                  {channel.playbook && (
+                    <Badge color="primary">from {channel.playbook}</Badge>
+                  )}
                 </AccordionHeader>
                 <AccordionBody accordionId={channel.id}>
-                  <ChannelForm key={channel.id} channel={channel} onChannelSaved={channelSaved} />
+                  <ChannelForm
+                    key={channel.id}
+                    channel={channel}
+                    onChannelSaved={channelSaved}
+                  />
                 </AccordionBody>
               </>
             ))}
@@ -403,7 +532,12 @@ export default function App() {
                   Board: {board.name}
                 </AccordionHeader>
                 <AccordionBody accordionId={board.id}>
-                  <BoardForm key={board.id} board={board} channels={channels} onBoardSaved={boardSaved} />
+                  <BoardForm
+                    key={board.id}
+                    board={board}
+                    channels={channels}
+                    onBoardSaved={boardSaved}
+                  />
                 </AccordionBody>
               </>
             ))}
@@ -414,29 +548,33 @@ export default function App() {
                   Playbook: {playbook.name}
                 </AccordionHeader>
                 <AccordionBody accordionId={playbook.id}>
-                  <PlaybookForm key={playbook.id} playbook={playbook} onPlaybookSaved={playbookSaved} />
+                  <PlaybookForm
+                    key={playbook.id}
+                    playbook={playbook}
+                    onPlaybookSaved={playbookSaved}
+                  />
                 </AccordionBody>
               </>
             ))}
           </Accordion>
-          <IntegrationForm integrations={integrations} setIntegrations={setIntegrations} />
+          <IntegrationForm
+            integrations={integrations}
+            setIntegrations={setIntegrations}
+          />
         </div>
-        <div className='col-4'>
-          <div className='row'>
-            <div className='col-12'>
+        <div className="col-4">
+          <div className="row">
+            <div className="col-12">
               <Preview
                 category={category}
                 useCase={useCase}
                 visibility={visibility}
-
                 hasFeatureFlag={hasFeatureFlag}
                 featureFlag={featureFlag}
-
                 playbooks={playbooks}
                 channels={channels}
                 boards={boards}
                 integrations={integrations}
-
                 onPlaybookRemoved={removePlaybook}
                 onChannelRemoved={removeChannel}
                 onBoardRemoved={removeBoard}
@@ -445,20 +583,16 @@ export default function App() {
             </div>
           </div>
         </div>
-        <div className='col-12'>
+        <div className="col-12">
           <YamlOutput
             workTemplateId={workTemplateId}
             category={category}
             useCase={useCase}
             illustration={illustration}
             visibility={visibility}
-
             hasFeatureFlag={hasFeatureFlag}
             featureFlag={featureFlag}
-
             description={description}
-
-
             boards={boards}
             channels={channels}
             playbooks={playbooks}
