@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormGroup, Label, Input } from 'reactstrap';
+import { slugify } from '../App';
 import { Board, Channel } from '../types';
 
 interface BoardFormProps {
@@ -33,6 +34,13 @@ export function BoardForm(props: BoardFormProps) {
       ...board,
       [e.target.name]: e.target.value,
     };
+
+    // get template
+    const template = Templates.find(
+      (template) => template.key === newBoard.template
+    );
+
+    newBoard.illustration = `/static/worktemplates/boards/${slugify(template?.name.trim().toLowerCase() || '')}.svg`;
 
     props.onBoardSaved(newBoard);
   };

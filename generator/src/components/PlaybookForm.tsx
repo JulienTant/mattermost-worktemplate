@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormGroup, Label, Input } from 'reactstrap';
+import { slugify } from '../App';
 import { Playbook } from '../types';
 
 interface PlaybookFormProps {
@@ -23,6 +24,13 @@ export function PlaybookForm(props: PlaybookFormProps) {
       ...playbook,
       [e.target.name]: e.target.value,
     };
+
+    // get template
+    const template = Templates.find(
+      (template) => template.key === newPlaybook.template
+    );
+
+    newPlaybook.illustration = `/static/worktemplates/playbooks/${slugify(template?.name.trim().toLowerCase() || '')}.svg`;
 
     props.onPlaybookSaved(newPlaybook);
   };

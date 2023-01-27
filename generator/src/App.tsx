@@ -26,7 +26,7 @@ import {
 } from './types';
 import YamlOutput from './components/YamlOutput';
 
-function slugify(txt: string) {
+export function slugify(txt: string) {
   return txt
     .toLowerCase()
     .replace(/ /g, '_')
@@ -34,7 +34,7 @@ function slugify(txt: string) {
 }
 
 const Categories = [
-  { key: 'product_team', name: 'Product Team' },
+  { key: 'product_teams', name: 'Product Team' },
   { key: 'devops', name: 'Dev Ops' },
   { key: 'company_wide', name: 'Company - Wide' },
   { key: 'leadership', name: 'Leadership' },
@@ -75,7 +75,7 @@ export default function App() {
     integration: {
       id: 'worktemplate.[category_id].[work_template_name].integration',
       defaultMessage: 'Description of why the integration(s) are needed',
-      illustration: '/static/worktemplates/{FIXME}.png',
+      illustration: '/static/worktemplates/integrations.svg',
     },
   });
   const [
@@ -111,9 +111,6 @@ export default function App() {
         integration: {
           ...oldDesc.integration,
           id: `${prefix}.integration`,
-          illustration: hasChangedIllustration
-            ? oldDesc.integration.illustration
-            : `/static/worktemplates/${slugCategory}/${slugUseCase}/integrations.png`,
         },
       };
     });
